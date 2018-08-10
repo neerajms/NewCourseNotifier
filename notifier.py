@@ -63,7 +63,15 @@ def check_for_changes():
             (By.XPATH,
              "/html/body/div[2]/div[6]/div[2]/div[2]/form/footer/span/button")))  # Locate search button
     search_button.click()  # Click on the search button
-    
+
+    # Get the number of courses
+    entries_count = WebDriverWait(browser, 10).until(
+        expected_conditions.presence_of_element_located(
+            (By.XPATH,
+             "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[3]/td/div/a/b")))  # Locate the entries count element which gives the number of courses
+    entries_count_text = entries_count.text  # read the number of courses
+    print(entries_count_text)  # print the number of courses
+
     assert "No results found." not in browser.page_source
 
 
