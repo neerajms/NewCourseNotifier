@@ -3,8 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import os.path
-
-from studip_credentials import studip
+from credentials import studip
+from credentials import gmail
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 def check_for_changes():
@@ -86,10 +89,32 @@ def check_for_changes():
         old_count_courses = 0  # Set the old number of courses to 0
     if int(new_count_courses) > int(
             old_count_courses):  # If the new number of courses is greater than the old number of courses
+        number_of_courses_added = int(new_count_courses) - int(
+            old_count_courses)  # Calculate the number of courses newly added
+        send_email(number_of_courses_added)  # Send the number of newly added courses by email
+        file.seek(0)  # Place the file pointer at the beginning
+        file.truncate()  # Delete the contents of the file
         file.write(new_count_courses)  # Update the number of courses to the new value
     file.close()  # Close the file after writing
 
     assert "No results found." not in browser.page_source
+
+
+# User defined function to send email containing the number of newly added courses
+def send_email(number_of_courses_added):
+    smtp_instance = smtplib.SMTP(host="smtp.gmail.com", port=587)  # Initialise SMTP instance
+    smtp_instance.starttls()  # Start TLS handshake
+    smtp_instance.login(gmail.get("email"), gmail.get("password"))  # Login
+
+    message_text = str(number_of_courses_added) + " new courses were addded to the course list"
+    message = MIMEMultipart()  # Create a message
+    # Set up the parameters of the message
+    message['From'] = gmail.get("email")
+    message['To'] = gmail.get("email_to")
+    message['Subject'] = "New courses added on StudIP"
+    message.attach(MIMEText(message_text, "plain"))  # Add the message body to the message
+    # Send the message
+    smtp_instance.send_message(message)
 
 
 check_for_changes()
