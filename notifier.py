@@ -1,5 +1,5 @@
-import urllib
 import re
+import nltk
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -57,6 +57,13 @@ def check_for_changes():
             (By.XPATH,
              "/html/body/div[2]/div[6]/div[2]/div[2]/form/fieldset/label[4]/div/select/option[6]")))  # Locate WS18/19 list item
     semester_list_item.click()  # Click on list item WS18/19
+    # Continued on the search page
+    search_button = WebDriverWait(browser, 10).until(
+        expected_conditions.presence_of_element_located(
+            (By.XPATH,
+             "/html/body/div[2]/div[6]/div[2]/div[2]/form/footer/span/button")))  # Locate search button
+    search_button.click()  # Click on the search button
+    
     assert "No results found." not in browser.page_source
 
 
