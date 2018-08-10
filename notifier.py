@@ -51,7 +51,12 @@ def check_for_changes():
             (By.XPATH,
              "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td[1]/ul/li[6]/a")))  # Locate the master informatik link
     master_informatik_link.click()  # Click on master informatik link
-
+    # Continued on the search page
+    semester_list_item = WebDriverWait(browser, 10).until(
+        expected_conditions.presence_of_element_located(
+            (By.XPATH,
+             "/html/body/div[2]/div[6]/div[2]/div[2]/form/fieldset/label[4]/div/select/option[6]")))  # Locate WS18/19 list item
+    semester_list_item.click()  # Click on list item WS18/19
     assert "No results found." not in browser.page_source
 
 
