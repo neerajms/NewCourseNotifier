@@ -40,11 +40,17 @@ def check_for_changes():
              "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/div/font/table/tbody/tr/td[2]")))  # Locate the search course directory element
     search_course_directory_element.click()  # Click on search course directory element
     # Continued on the search page
-    fakultaet_informatik_mathematik_element = WebDriverWait(browser, 10).until(
+    fakultaet_informatik_mathematik_link = WebDriverWait(browser, 10).until(
         expected_conditions.presence_of_element_located(
             (By.XPATH,
              "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td[1]/ul/li[5]/a")))  # Locate the faculty of informatik and mathematik element
-    fakultaet_informatik_mathematik_element.click()  # Click on faculty of informatik and mathematik element
+    fakultaet_informatik_mathematik_link.click()  # Click on faculty of informatik and mathematik element
+    # Continued on the search page
+    master_informatik_link = WebDriverWait(browser, 10).until(
+        expected_conditions.presence_of_element_located(
+            (By.XPATH,
+             "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td[1]/ul/li[6]/a")))  # Locate the master informatik link
+    master_informatik_link.click()  # Click on master informatik link
 
     assert "No results found." not in browser.page_source
 
