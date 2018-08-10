@@ -1,9 +1,8 @@
-import re
-import nltk
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+import os.path
 
 from studip_credentials import studip
 
@@ -69,8 +68,26 @@ def check_for_changes():
         expected_conditions.presence_of_element_located(
             (By.XPATH,
              "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[3]/td/div/a/b")))  # Locate the entries count element which gives the number of courses
-    entries_count_text = entries_count.text  # read the number of courses
-    print(entries_count_text)  # print the number of courses
+    new_count_courses = entries_count.text  # read the number of courses
+    print(new_count_courses)  # print the number of courses
+
+    # Compare the new number of courses with the old number of courses on the file and update the value
+    if os.path.exists(
+            "status_new_course_notifier.txt"):  # Check if the file that stores the number of current courses exists
+        file = open("status_new_course_notifier.txt",
+                    "r+")  # Open the existing file in read, write mode
+    else:  # If the file that stores the number of courses does not exist
+        file = open("status_new_course_notifier.txt",
+                    "w+")  # Create the file and open it in write mode
+    file_content = file.read()  # Read the contents of the file
+    if len(file_content) != 0:  # If the file is not empty
+        old_count_courses = file_content  # Read the value of the number of courses on the file
+    else:  # If the file is empty
+        old_count_courses = 0  # Set the old number of courses to 0
+    if int(new_count_courses) > int(
+            old_count_courses):  # If the new number of courses is greater than the old number of courses
+        file.write(new_count_courses)  # Update the number of courses to the new value
+    file.close()  # Close the file after writing
 
     assert "No results found." not in browser.page_source
 
