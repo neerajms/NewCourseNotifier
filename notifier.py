@@ -3,7 +3,7 @@ import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions
 
 from studip_credentials import studip
 
@@ -29,9 +29,16 @@ def check_for_changes():
 
     # On the user start page
     course_search_element = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located(
+        expected_conditions.presence_of_element_located(
             (By.XPATH, "/html/body/div[2]/div[5]/ul/li[6]/a")))  # Locate the element to search for courses
     course_search_element.click()  # Click the search button to go to search page
+
+    # On the search page
+    search_course_directory_element = WebDriverWait(browser, 10).until(
+        expected_conditions.presence_of_element_located(
+            (By.XPATH,
+             "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/div/font/table/tbody/tr/td[2]")))  # Locate the search course directory element
+    search_course_directory_element.click()
 
     assert "No results found." not in browser.page_source
 
