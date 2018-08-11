@@ -1,13 +1,17 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+#!/home/neeraj/anaconda3/bin/python3.6
 import os.path
-from credentials import studip
-from credentials import gmail
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
+
+from credentials import gmail
+from credentials import studip
 
 
 def check_for_changes():
@@ -15,7 +19,10 @@ def check_for_changes():
     login_url = "https://studip.uni-passau.de/studip/index.php"
 
     # Initialize browser, find username and password elements, pass their values
-    browser = webdriver.Firefox()  # Instance of firefox webdriver is created
+    options = Options()  # Firefox options instance
+    options.add_argument('-headless')  # Passing headless option
+    browser = webdriver.Firefox(executable_path='geckodriver',
+                                firefox_options=options)  # Instance of firefox webdriver is created
     browser.get(login_url)  # Open the login_url using firefox
     browser.find_element_by_partial_link_text("for students and employees").click()
 
@@ -76,11 +83,11 @@ def check_for_changes():
 
     # Compare the new number of courses with the old number of courses on the file and update the value
     if os.path.exists(
-            "status_new_course_notifier.txt"):  # Check if the file that stores the number of current courses exists
-        file = open("status_new_course_notifier.txt",
+            "/home/neeraj/status_new_course_notifier.txt"):  # Check if the file that stores the number of current courses exists
+        file = open("/home/neeraj/status_new_course_notifier.txt",
                     "r+")  # Open the existing file in read, write mode
     else:  # If the file that stores the number of courses does not exist
-        file = open("status_new_course_notifier.txt",
+        file = open("/home/neeraj/status_new_course_notifier.txt",
                     "w+")  # Create the file and open it in write mode
     file_content = file.read()  # Read the contents of the file
     if len(file_content) != 0:  # If the file is not empty
