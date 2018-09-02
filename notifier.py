@@ -80,6 +80,7 @@ def check_for_changes():
              "/html/body/div[2]/div[6]/div[2]/div[2]/table[2]/tbody/tr/td/table/tbody/tr[3]/td/div/a/b")))  # Locate the entries count element which gives the number of courses
     new_count_courses = entries_count.text  # read the number of courses
     print(new_count_courses)  # print the number of courses
+    browser.close()  # Close the instance of firefox
 
     # Compare the new number of courses with the old number of courses on the file and update the value
     if os.path.exists(
@@ -104,7 +105,7 @@ def check_for_changes():
         file.write(new_count_courses)  # Update the number of courses to the new value
     file.close()  # Close the file after writing
 
-    assert "No results found." not in browser.page_source
+    # assert "No results found." not in browser.page_source
 
 
 # User defined function to send email containing the number of newly added courses
